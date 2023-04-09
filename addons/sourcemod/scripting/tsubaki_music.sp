@@ -10,7 +10,7 @@ Handle g_hMusicTask;
 
 public Plugin myinfo = 
 {
-    name = "TsuBaKi Camera",
+    name = "TsuBaKi Music Player",
     author = "WhiteCola",
     description = "",
     version = "0.0",
@@ -62,7 +62,7 @@ public Native_PlayerMusic(Handle:plugin, numParmas) {
                     , .level=SNDLEVEL_NORMAL
                     , .flags=SND_NOFLAGS
                     , .volume=gfCurrentBGMVolume
-                    );
+                );
             }
         }
     }
@@ -70,11 +70,11 @@ public Native_PlayerMusic(Handle:plugin, numParmas) {
     if(repeat) {
         g_hMusicTask = CreateTimer(length, RepeatMusic, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
     } else {
-        g_hMusicTask = CreateTimer(length, RepeatMusic, TIMER_FLAG_NO_MAPCHANGE);
+        g_hMusicTask = CreateTimer(length, StopMusic, TIMER_FLAG_NO_MAPCHANGE);
     }
 }
 
-    public Action RemoveMusic(Handle timer) {
+    public Action StopMusic(Handle timer) {
         RemoveEntity(giCurrentMusicPlayerRefId);
         giCurrentMusicPlayerRefId = 0;
         
@@ -96,7 +96,7 @@ public Native_PlayerMusic(Handle:plugin, numParmas) {
                             , .level=SNDLEVEL_NORMAL
                             , .flags=SND_NOFLAGS
                             , .volume=gfCurrentBGMVolume
-                            );
+                        );
                     }
                 }
             }
