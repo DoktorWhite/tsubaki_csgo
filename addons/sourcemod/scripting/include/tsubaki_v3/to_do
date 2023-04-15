@@ -1,0 +1,41 @@
+//Outside plugin
+Zombie Ability SQL
+Boss Ability SQL
+SP Ability SQL
+
+Zombie Skill SQL
+Human Skill SQL
+
+Abnormal Item 設計器
+
+Ability Effect
+Item Effect
+Equip Effect
+Equip to skill
+
+//Inside plugin
+Backpack 自動補上
+//Backpack 後備顯示
+//SP Ability Retrieve
+比CT T槍時短時間轉隊
+
+轉生金幣
+
+
+TRAP
+DMG_AREA
+
+
+Respawn To Human
+    Remove All Zombie Active/Passive
+    Recover all Human Active/Passive
+
+Human died
+    Remove All Active/Passive
+
+
+變動
+    技能介面 /skill
+    裝備的技能全部集中在技能
+
+    

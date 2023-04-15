@@ -1,5 +1,5 @@
-#include <tsubaki_v2/tsubaki_common>
-#include <tsubaki_v2/tsubaki_bullet>
+#include <tsubaki_v3/tsubaki_common>
+#include <tsubaki_v3/tsubaki_bullet>
 
 stock char LAUNCHER_MODEL[] = "models/blackout.mdl";
 stock char BULLET_MODEL[] = "models/knastjunkies/soccerball.mdl";
@@ -22,8 +22,8 @@ public Plugin myinfo =
 
 public void OnPluginStart() {
 
-    PrecacheModel(LAUNCHER_MODEL);
-    PrecacheModel(BULLET_MODEL);
+    PrecacheModel(LAUNCHER_MODEL, false);
+    PrecacheModel(BULLET_MODEL, false);
     AddFileToDownloadsTable("models/knastjunkies/soccerball.mdl");
     AddFileToDownloadsTable("models/knastjunkies/SoccerBall.dx90.vtx");
     AddFileToDownloadsTable("models/knastjunkies/SoccerBall.phy");

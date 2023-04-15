@@ -16,6 +16,11 @@ native SetPlayerMusicVolume(client, Float:volume);
  * @param repeat true:重複播放
  * @param length 長度
  */
-native PlayerMusic(String:music_path[], bool:repeat, Float:length);
+native PlayMusic(String:music_path[], bool:repeat, Float:length, Float:volume);
+
+/**
+ * 停止現時在播放的音樂
+ */
+native StopCurrentMusic();
 
 #pragma semicolon 0

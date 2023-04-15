@@ -240,6 +240,10 @@
     stock char m_vecStartPoint[] = "m_vecStartPoint";
     stock char m_vecEndPoint[] = "m_vecEndPoint";
     stock char m_nHaloIndex[] = "m_nHaloIndex";
+	stock char m_vecCenter[] = "m_vecCenter";
+	stock char m_flStartRadius[] = "m_flStartRadius";
+	stock char m_flEndRadius[] = "m_flEndRadius";
+	stock char m_fAmplitude[] = "m_fAmplitude";
     stock char m_nStartFrame[] = "m_nStartFrame";
     stock char m_nFrameRate[] = "m_nFrameRate";
     stock char m_fLife[] = "m_fLife";
@@ -353,6 +357,9 @@
     * @param model_route    模組(使用跟子實體同樣的模組)
     * @param movetype       MOVETYPE_*
     * @param owner          主人
+    * 
+    * @return ref
+    * @return -1 when Failed to Create
     *
     */
     stock CreateInvisibleLauncher(const char[] clsname, const char[] model_route, MoveType movetype=MOVETYPE_NOCLIP, owner=0, bool:get_reference=false) {
@@ -531,10 +538,40 @@
         TE_WriteNum(m_chMaterialType, materialtype);
         TE_SendToAll();
     }
+
+    stock void TBKBeamRingPoint(sprite_id, const float center[3], const float start_radius, const float end_radius,
+		const float life, const float width, const float end_width, const float amp,
+		const int r, const int g, const int b, const int a, const int speed=0, flag=FBEAM_ISACTIVE)
+	{
+		static char BeamRingPoint[] = "BeamRingPoint";
+
+		TE_Start(BeamRingPoint);
+		TE_WriteVector(m_vecCenter, center);
+		TE_WriteFloat(m_flStartRadius, start_radius);
+		TE_WriteFloat(m_flEndRadius, end_radius);
+		TE_WriteNum(m_nModelIndex, sprite_id);
+		TE_WriteNum(m_nHaloIndex, 0);
+		TE_WriteNum(m_nStartFrame, 0);
+		TE_WriteNum(m_nFrameRate, 0);
+		TE_WriteFloat(m_fLife, life);
+		TE_WriteFloat(m_fWidth, width);
+		TE_WriteFloat(m_fEndWidth, end_width);
+		TE_WriteFloat(m_fAmplitude, amp);
+		TE_WriteNum(sz_r, r);
+		TE_WriteNum(sz_g, g);
+		TE_WriteNum(sz_b, b);
+		TE_WriteNum(sz_a, a);
+		TE_WriteNum(m_nSpeed, speed);
+		TE_WriteNum(m_nFlags, flag);
+		TE_WriteNum(m_nFadeLength, 0);
+		TE_SendToAll();
+
+	}
+
 /*  Player  */
 
     #define IsClientValid(%0) (1<=%0<=MaxClients && IsClientInGame(%0))
-    #define GetClientCenterOrigin(%0,%1) GetClientAbsOrigin(%0,%1); %1[2]+=40.0
+    #define GetClientCenterOrigin(%0,%1) GetClientAbsOrigin(%0,%1); %1[2]+=45.0
     #define GetClientAimAngles(%0,%1) GetClientEyeAngles(%0,%1); %1[0]*=-1.0
 
     stock bool GetPlayerAimOrigin(int client, float vec[3])
@@ -580,11 +617,37 @@
 				}
 			}
 			else
+
 			{
 				while( (entity_id=GetPlayerWeaponSlot(client, remove_slot)) != -1 )
 					RemovePlayerItem(client, entity_id);
 			}
 		}
 	}
+
+/*  Identity Constant  */
+
+	#define TOTAL_IDENTITY  (1+4)			//0 is used for empty(Total Player)
+		#define IDENTITY_HUMAN		1		//flag:a
+		#define IDENTITY_LEADER		2		//flag:b
+		#define IDENTITY_ZOMBIE		3		//flag:c
+		#define IDENTITY_BOSS		4		//flag:d
+
+    #define TARGET_ALL  (0xFFFFFFFF)
+    #define TARGET_HUMAN    (1<<IDENTITY_HUMAN)
+    #define TARGET_LEADER   (1<<IDENTITY_LEADER)
+    #define TARGET_ZOMBIE   (1<<IDENTITY_ZOMBIE)
+    #define TARGET_BOSS     (1<<IDENTITY_BOSS)
+    
+	stock String:NAME_OF_IDENTITY[TOTAL_IDENTITY][] =
+	{ 
+		"EMPTY", "人類", "隊長", "喪屍", "BOSS"
+	};
+
+	stock giPlyIdentity[MAXPLAYERS];
+	#define PLY_IDENTITY(%0) 	giPlyIdentity[%0]
+	#define IsPlayerHuman(%0) 	(giPlyIdentity[%0] == IDENTITY_HUMAN || giPlyIdentity[%0] == IDENTITY_LEADER)
+	#define IsPlayerZombie(%0)	(giPlyIdentity[%0] == IDENTITY_ZOMBIE)
+	#define IsPlayerBoss(%0)	(giPlyIdentity[%0] == IDENTITY_BOSS)
 
 #pragma semicolon 0
